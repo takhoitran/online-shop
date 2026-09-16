@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>df5ebb1e-e69c-4073-b466-7feaf3d4dece</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\Identity\Application\OnlineShop.Modules.Identity.Application.csproj" />
+    <ProjectReference Include="..\Modules\Identity\Infrastructure\OnlineShop.Modules.Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Catalog\Application\OnlineShop.Modules.Catalog.Application.csproj" />
+    <ProjectReference Include="..\Modules\Catalog\Infrastructure\OnlineShop.Modules.Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Inventory\Application\OnlineShop.Modules.Inventory.Application.csproj" />
+    <ProjectReference Include="..\Modules\Inventory\Infrastructure\OnlineShop.Modules.Inventory.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Ordering\Application\OnlineShop.Modules.Ordering.Application.csproj" />
+    <ProjectReference Include="..\Modules\Ordering\Infrastructure\OnlineShop.Modules.Ordering.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\AiAdvisory\Application\OnlineShop.Modules.AiAdvisory.Application.csproj" />
+    <ProjectReference Include="..\Modules\AiAdvisory\Infrastructure\OnlineShop.Modules.AiAdvisory.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Notification\Application\OnlineShop.Modules.Notification.Application.csproj" />
+    <ProjectReference Include="..\Modules\Notification\Infrastructure\OnlineShop.Modules.Notification.Infrastructure.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\OnlineShop.BuildingBlocks.csproj" />
+    <ProjectReference Include="..\TelegramBot\OnlineShop.TelegramBot.csproj" />
+  </ItemGroup>
+
+</Project>

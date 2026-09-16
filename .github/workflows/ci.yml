@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: onlineshop
+          POSTGRES_PASSWORD: onlineshop_dev_password
+          POSTGRES_DB: onlineshop
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U onlineshop"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore backend/OnlineShop.sln
+
+      - name: Build
+        run: dotnet build backend/OnlineShop.sln --no-restore -c Release
+
+      # Unit tests need no external services — pure domain logic.
+      - name: Unit tests
+        run: dotnet test backend/tests/OnlineShop.UnitTests/OnlineShop.UnitTests.csproj --no-build -c Release
+
+      # Integration tests boot the real Api host against the postgres service above (see
+      # CustomWebApplicationFactory — it creates+migrates a dedicated "onlineshop_test" database
+      # on that same server, never touching "onlineshop" itself).
+      - name: Integration tests
+        run: dotnet test backend/tests/OnlineShop.IntegrationTests/OnlineShop.IntegrationTests.csproj --no-build -c Release
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Type-check and build
+        working-directory: web
+        run: npm run build

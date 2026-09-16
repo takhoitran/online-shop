@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: onlineshop-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: onlineshop
+      POSTGRES_PASSWORD: onlineshop_dev_password
+      POSTGRES_DB: onlineshop
+    ports:
+      # Host is 5433, not 5432: this machine already has a native PostgreSQL service
+      # bound to 5432 (a separate, unrelated install) — avoid colliding with it.
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U onlineshop"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: onlineshop-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Overrides appsettings.json's ConnectionStrings:Postgres (which points at localhost:5433,
+      # correct for `dotnet run` on the host machine, not for one container reaching another) —
+      # ASP.NET Core config binds "__" as the JSON-nesting separator.
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=onlineshop;Username=onlineshop;Password=onlineshop_dev_password"
+      # CHANGE_ME values are dev-only placeholders — override via a .env file (see .env.example)
+      # for anything beyond a local demo; never commit real secrets here.
+      Jwt__Secret: "${JWT_SECRET:-CHANGE_ME_dev_only_super_secret_key_min_32_chars}"
+      TelegramBot__BotToken: "${TELEGRAM_BOT_TOKEN:-}"
+      Gemini__ApiKey: "${GEMINI_API_KEY:-}"
+    ports:
+      - "5032:8080"
+    volumes:
+      - api_uploads:/app/wwwroot/uploads
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: onlineshop-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8081:80"
+
+volumes:
+  postgres_data:
+  api_uploads:

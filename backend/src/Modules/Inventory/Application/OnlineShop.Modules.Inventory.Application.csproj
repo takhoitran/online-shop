@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\OnlineShop.Modules.Inventory.Domain.csproj" />
+    <ProjectReference Include="..\..\Catalog\Application\OnlineShop.Modules.Catalog.Application.csproj" />
+    <ProjectReference Include="..\..\Catalog\Domain\OnlineShop.Modules.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\..\Ordering\Domain\OnlineShop.Modules.Ordering.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

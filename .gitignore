@@ -1,0 +1,22 @@
+# .NET
+backend/**/bin/
+backend/**/obj/
+*.user
+.vs/
+
+# Node / React
+web/node_modules/
+web/dist/
+web/.vite/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+*.local.json
+appsettings.*.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+~$*.docx
